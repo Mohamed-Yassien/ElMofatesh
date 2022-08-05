@@ -336,6 +336,11 @@ class RatingsCubit extends Cubit<RatingsStates> {
     emit(SaveQuestionInListState());
   }
 
+ deleteQuestionFromList(int index , SaveQuestions saveQuestions){
+     savedQuestions.removeAt(index);
+     emit(RemoveQuestionFromList());
+ }
+
   clearAllData() {
     savedQuestions.clear();
     templateId = null;

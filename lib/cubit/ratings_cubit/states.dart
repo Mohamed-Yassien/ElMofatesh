@@ -72,4 +72,6 @@ class AddOperationIdInListState extends RatingsStates {}
 
 class AddChooseValueInMapState extends RatingsStates {}
 
-class ClearAllDataState extends RatingsStates{}
+class ClearAllDataState extends RatingsStates {}
+
+class RemoveQuestionFromList extends RatingsStates {}

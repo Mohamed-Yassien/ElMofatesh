@@ -123,23 +123,6 @@ class RatingsDetailsScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      if (cubit.index > 0)
-                        Container(
-                          alignment: Alignment.bottomRight,
-                          color: Colors.white,
-                          child: TextButton(
-                            onPressed: () {
-                              cubit.decreaseIndex(cubit.index);
-                            },
-                            child: const Text(
-                              ' السابق >',
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
                       Card(
                         elevation: 20,
                         child: Padding(
@@ -424,11 +407,12 @@ class RatingsDetailsScreen extends StatelessWidget {
                                     flex: 4,
                                     child: GestureDetector(
                                       onTap: () async {
-                                        await ImagePicker().pickImage(
+                                        await ImagePicker()
+                                            .pickImage(
                                           source: ImageSource.camera,
-                                        ).then((value) {
-                                          cubit.imageFile =
-                                              File(value!.path);
+                                        )
+                                            .then((value) {
+                                          cubit.imageFile = File(value!.path);
                                           cubit.fillImagesList(
                                             cubit.imageFile!.path,
                                             cubit.index,
@@ -516,52 +500,89 @@ class RatingsDetailsScreen extends StatelessWidget {
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(15.0),
-                                child: Text(cubit.imagesMap[cubit.index]?.split('/').last ?? ''),
+                                child: Text(cubit.imagesMap[cubit.index]
+                                        ?.split('/')
+                                        .last ??
+                                    ''),
                               ),
                             ],
                           ),
                         ),
                       ),
-                      Container(
-                        alignment: Alignment.bottomLeft,
-                        color: Colors.white,
-                        child: TextButton(
-                          onPressed: () {
-                            if (cubit.index ==
-                                cubit.ratingDetailModel!.questions!.length -
-                                    1) {
-                              showToast(
-                                  msg:
-                                      'تم الانتهاء من جميع الاسئلة. الرجاء الحفظ',
-                                  toastStates: ToastStates.SUCCESS);
-                            }
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Expanded(
+                            child: Container(
+                              alignment: Alignment.bottomLeft,
+                              color: Colors.white,
+                              child: TextButton(
+                                onPressed: () {
+                                  if (cubit.index ==
+                                      cubit.ratingDetailModel!.questions!
+                                              .length -
+                                          1) {
+                                    showToast(
+                                        msg:
+                                            'تم الانتهاء من جميع الاسئلة. الرجاء الحفظ',
+                                        toastStates: ToastStates.SUCCESS);
+                                  }
 
-                            cubit.saveQuestionInList(
-                              SaveQuestions(
-                                choose: cubit.choosesMap[cubit.index],
-                                answerType: cubit.ratingDetailModel!
-                                    .questions![cubit.index].answerType,
-                                id: cubit.ratingDetailModel!
-                                    .questions![cubit.index].id,
-                                image: cubit.imagesMap[cubit.index] ?? '',
-                                notes:
-                                    cubit.controllersValues[cubit.index] ?? '',
-                                question: cubit.ratingDetailModel!
-                                    .questions![cubit.index].question,
-                                operationId: cubit.operationsId[cubit.index],
+                                  cubit.saveQuestionInList(
+                                    SaveQuestions(
+                                      choose: cubit.choosesMap[cubit.index],
+                                      answerType: cubit.ratingDetailModel!
+                                          .questions![cubit.index].answerType,
+                                      id: cubit.ratingDetailModel!
+                                          .questions![cubit.index].id,
+                                      image: cubit.imagesMap[cubit.index] ?? '',
+                                      notes: cubit
+                                              .controllersValues[cubit.index] ??
+                                          '',
+                                      question: cubit.ratingDetailModel!
+                                          .questions![cubit.index].question,
+                                      operationId:
+                                          cubit.operationsId[cubit.index],
+                                    ),
+                                  );
+                                  print(cubit.savedQuestions);
+                                  cubit.increaseIndex(cubit.index);
+                                },
+                                child: const Text(
+                                  ' < التالي  ',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                               ),
-                            );
-                            print(cubit.savedQuestions);
-                            cubit.increaseIndex(cubit.index);
-                          },
-                          child: const Text(
-                            ' < التالي  ',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                        ),
+                          if (cubit.index > 0)
+                            Expanded(
+                              child: Container(
+                                alignment: Alignment.bottomRight,
+                                color: Colors.white,
+                                child: TextButton(
+                                  onPressed: () {
+                                    cubit.decreaseIndex(cubit.index);
+                                    cubit.deleteQuestionFromList(
+                                      cubit.index,
+                                      cubit.savedQuestions[cubit.index],
+                                    );
+                                    print(cubit.savedQuestions);
+                                  },
+                                  child: const Text(
+                                    ' السابق >',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                        ],
                       ),
                     ],
                   ),
